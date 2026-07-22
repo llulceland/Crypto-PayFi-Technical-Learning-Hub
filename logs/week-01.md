@@ -24,3 +24,26 @@
 ---
 
 ### 🏗️ Flow / Architecture Concept
+
+---
+
+### 🛠️ TPM Interview Takeaways (How to explain this in an interview)
+> **Interview Question:** *"How do you handle discrepancy in cross-system payment flows?"*
+* **Key Narrative:** Point to my Bank of England RTGS experience. Emphasize that while messages like `pacs.008` validate intent, financial settlement relies on `camt.053` bank statements matching ledger entries.
+* **Technical Design Solution:** Use **AWS EventBridge** for async message queuing and **DynamoDB ACID transactions** to avoid double-spending or duplicate token minting.
+
+---
+[ User Initiates ]
+│
+▼
+[ pacs.008 Validation ] ──(Failure)──► [ Dead Letter Queue (DLQ) / Retry ]
+│
+▼
+[ BOE RTGS Core Settlement ]
+│
+▼
+[ camt.053 Generated ] ──► [ Automated Reconciliation Engine ]
+
+### 🔗 Resources & Further Reading
+- [ ] ISO 20022 Official pacs.008 Message Definition
+- [ ] AWS Event-Driven Architecture for Financial Systems
